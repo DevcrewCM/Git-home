@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <!-- Fondo con gradiente -->
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Icono de código <> -->
+  <g filter="url(#glow)">
+    <path d="M 15 30 L 5 20 L 15 10" stroke="url(#grad1)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 25 10 L 35 20 L 25 30" stroke="url(#grad1)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  
+  <!-- Texto DEVCREW -->
+  <text x="45" y="23" font-family="'Inter', 'Arial', sans-serif" font-size="20" font-weight="700" fill="#f1f5f9">
+    DEV
+  </text>
+  <text x="45" y="45" font-family="'Inter', 'Arial', sans-serif" font-size="20" font-weight="700" fill="url(#grad1)">
+    CREW
+  </text>
+  
+  <!-- Detalle decorativo -->
+  <circle cx="132" cy="34" r="2" fill="url(#grad1)" opacity="0.6"/>
+</svg>
