@@ -1,4 +1,3 @@
-// Toggle del sidebar - funciona tanto en desktop como móvil
 function initSidebarToggle() {
     const sidebar = document.querySelector('.admin-sidebar');
     const mainContent = document.querySelector('.admin-main');
@@ -9,7 +8,6 @@ function initSidebarToggle() {
         sidebar.classList.toggle('open');
         sidebar.classList.toggle('collapsed');
         mainContent.classList.toggle('sidebar-collapsed');
-        console.log('Sidebar toggled'); // debug
     };
 
     if (toggleBtn) {
@@ -20,7 +18,6 @@ function initSidebarToggle() {
         mobileToggle.addEventListener('click', toggleSidebar);
     }
 
-    // Cerrar sidebar al hacer click fuera (solo móvil)
     document.addEventListener('click', (e) => {
         if (window.innerWidth <= 768) {
             if (!sidebar.contains(e.target) && !mobileToggle.contains(e.target)) {
@@ -31,7 +28,6 @@ function initSidebarToggle() {
     });
 }
 
-// Ordenar tablas al hacer click en headers
 function initTableSorting() {
     const tables = document.querySelectorAll('.admin-table.sortable');
 
@@ -39,21 +35,15 @@ function initTableSorting() {
         const headers = table.querySelectorAll('th[data-sortable]');
 
         headers.forEach(header => {
-            header.style.cursor = 'pointer'; // cursor pointer para que se vea clickeable
+            header.style.cursor = 'pointer';
             header.addEventListener('click', () => {
-                const column = header.dataset.sortable;
                 const tbody = table.querySelector('tbody');
                 const rows = Array.from(tbody.querySelectorAll('tr'));
-
                 const isAscending = header.classList.contains('sort-asc');
 
-                // limpiar clases de sort de todas las columnas
                 headers.forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
-
-                // añadir la clase apropiada
                 header.classList.add(isAscending ? 'sort-desc' : 'sort-asc');
 
-                // ordenar filas
                 rows.sort((a, b) => {
                     const aValue = a.querySelector(`td:nth-child(${header.cellIndex + 1})`).textContent;
                     const bValue = b.querySelector(`td:nth-child(${header.cellIndex + 1})`).textContent;
@@ -65,29 +55,12 @@ function initTableSorting() {
                     }
                 });
 
-                // reordenar el DOM con las filas ordenadas
                 rows.forEach(row => tbody.appendChild(row));
             });
         });
     });
 }
 
-// Los modales los maneja Bootstrap, aquí solo agregamos logging
-function initModals() {
-    const modals = document.querySelectorAll('.modal');
-
-    modals.forEach(modal => {
-        modal.addEventListener('show.bs.modal', (e) => {
-            // console.log('Abriendo modal:', modal.id); // descomentado para debug
-        });
-
-        modal.addEventListener('hide.bs.modal', (e) => {
-            // console.log('Cerrando modal:', modal.id);
-        });
-    });
-}
-
-// Barras de progreso con animación
 const initProgressBars = () => {
     const animateProgressBar = (bar) => {
         const targetWidth = bar.dataset.progress || '0';
@@ -96,10 +69,6 @@ const initProgressBars = () => {
         setTimeout(() => {
             bar.style.width = targetWidth + '%';
         }, 100);
-    };
-
-    const observerOptions = {
-        threshold: 0.1
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -112,14 +81,13 @@ const initProgressBars = () => {
                 }
             }
         });
-    }, observerOptions);
+    }, { threshold: 0.1 });
 
     document.querySelectorAll('.progress-container').forEach(container => {
         observer.observe(container);
     });
 };
 
-// Inicializar Tooltips
 const initTooltips = () => {
     const tooltipTriggerList = [].slice.call(
         document.querySelectorAll('[data-bs-toggle="tooltip"]')
@@ -133,7 +101,6 @@ const initTooltips = () => {
     });
 };
 
-// Inicializar Popovers
 const initPopovers = () => {
     const popoverTriggerList = [].slice.call(
         document.querySelectorAll('[data-bs-toggle="popover"]')
@@ -147,24 +114,6 @@ const initPopovers = () => {
     });
 };
 
-// Actualizar breadcrumb dinámicamente
-const updateBreadcrumb = (items) => {
-    const breadcrumbElement = document.querySelector('.breadcrumb');
-
-    if (!breadcrumbElement) return;
-
-    breadcrumbElement.innerHTML = items.map((item, index) => {
-        const isLast = index === items.length - 1;
-
-        if (isLast) {
-            return `<li class="breadcrumb-item active" aria-current="page">${item.label}</li>`;
-        } else {
-            return `<li class="breadcrumb-item"><a href="${item.url || '#'}">${item.label}</a></li>`;
-        }
-    }).join('');
-};
-
-// Simular refresh de datos
 const initDataRefresh = () => {
     const refreshButtons = document.querySelectorAll('[data-refresh]');
 
@@ -174,17 +123,12 @@ const initDataRefresh = () => {
             const targetElement = document.querySelector(target);
 
             if (targetElement) {
-                // loading state
                 button.disabled = true;
                 button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Actualizando...';
 
-                // simular llamada al servidor
                 setTimeout(() => {
                     button.disabled = false;
-                    button.innerHTML = '🔄 Actualizar';
-                    console.log('Datos actualizados:', target);
-
-                    // TODO: aquí iría la llamada real a la API
+                    button.innerHTML = 'Actualizar';
                     alert('Datos actualizados correctamente');
                 }, 1500);
             }
@@ -192,7 +136,6 @@ const initDataRefresh = () => {
     });
 };
 
-// Confirmación de borrado
 const initDeleteConfirmations = () => {
     const deleteButtons = document.querySelectorAll('[data-delete]');
 
@@ -204,8 +147,6 @@ const initDeleteConfirmations = () => {
             const confirmed = confirm(`¿Está seguro de que desea eliminar "${itemName}"?`);
 
             if (confirmed) {
-                console.log('Eliminando:', itemName);
-                // TODO: implementar lógica real de borrado
                 const row = button.closest('tr');
                 if (row) {
                     row.style.opacity = '0';
@@ -216,13 +157,11 @@ const initDeleteConfirmations = () => {
     });
 };
 
-// Contador animado para las stats
 const initStatsCounters = () => {
     const animateCounter = (element, target) => {
         const duration = 2000;
-        const start = 0;
         const increment = target / (duration / 16);
-        let current = start;
+        let current = 0;
 
         const timer = setInterval(() => {
             current += increment;
@@ -232,10 +171,6 @@ const initStatsCounters = () => {
             }
             element.textContent = Math.floor(current).toLocaleString();
         }, 16);
-    };
-
-    const observerOptions = {
-        threshold: 0.5
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -249,14 +184,13 @@ const initStatsCounters = () => {
                 }
             }
         });
-    }, observerOptions);
+    }, { threshold: 0.5 });
 
     document.querySelectorAll('.stat-card').forEach(card => {
         observer.observe(card);
     });
 };
 
-// Buscar/Filtrar en la tabla
 const initTableFilter = () => {
     const searchInputs = document.querySelectorAll('[data-table-search]');
 
@@ -278,13 +212,9 @@ const initTableFilter = () => {
     });
 };
 
-// Inicializar todo cuando cargue el DOM
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Cargando panel admin...');
-
     initSidebarToggle();
     initTableSorting();
-    initModals();
     initProgressBars();
     initTooltips();
     initPopovers();
@@ -292,23 +222,4 @@ document.addEventListener('DOMContentLoaded', () => {
     initDeleteConfirmations();
     initStatsCounters();
     initTableFilter();
-
-    console.log('✓ Panel admin listo');
 });
-
-// Exportar funciones por si las necesitamos después
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        initSidebarToggle,
-        initTableSorting,
-        initModals,
-        initProgressBars,
-        initTooltips,
-        initPopovers,
-        updateBreadcrumb,
-        initDataRefresh,
-        initDeleteConfirmations,
-        initStatsCounters,
-        initTableFilter
-    };
-}
